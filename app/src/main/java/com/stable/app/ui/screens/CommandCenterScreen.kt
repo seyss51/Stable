@@ -1,72 +1,55 @@
 package com.stable.app.ui.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.stable.app.ui.components.*
 
 @Composable
 fun CommandCenterScreen() {
 
-    Scaffold {
+    Column(
 
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-                .padding(24.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp),
 
-            horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
+
+    ) {
+
+        StableTopBar()
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        ScoreGauge(
+            score = 82
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        MissionCard(
+
+            phase = "Phase 1 • Fondations",
+
+            duration = "15 minutes"
+
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        StableButton(
+
+            text = "JE M'ENGAGE"
+
         ) {
 
-            Spacer(modifier = Modifier.height(20.dp))
+            // Navigation vers la séance
 
-            Text(
-                text = "S.T.A.B.L.E.",
-                style = MaterialTheme.typography.headlineLarge
-            )
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            Text(
-                text = "MISSION DU JOUR",
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text("Phase 1 - Fondations")
-
-            Text("15 minutes")
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Button(
-                onClick = {
-                    // prochain sprint
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-            ) {
-
-                Text("JE M'ENGAGE")
-
-            }
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Text(
-                text = "Score S.T.A.B.L.E.",
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            Text(
-                text = "82",
-                style = MaterialTheme.typography.displayLarge
-            )
         }
+
     }
+
 }
