@@ -78,6 +78,9 @@ dependencies {
     implementation(libs.androidx.ui.preview)
 
     implementation(libs.androidx.material3)
+implementation("com.google.code.gson:gson:2.11.0")
+implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
     debugImplementation(libs.androidx.ui.tooling)
 
