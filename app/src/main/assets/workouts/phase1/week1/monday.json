@@ -1,0 +1,79 @@
+{
+  "id": "p1w1monday",
+  "title": "Phase 1 - Fondations",
+
+  "phase": 1,
+
+  "week": 1,
+
+  "estimatedMinutes": 15,
+
+  "exercises": [
+
+    {
+
+      "id": "warmup",
+
+      "title": "Échauffement",
+
+      "description": "Mobilité générale",
+
+      "type": "TIMER",
+
+      "duration": 60,
+
+      "video": "videos/warmup.mp4",
+
+      "tips": [
+
+        "Respire calmement",
+
+        "Mobilise les épaules",
+
+        "Bouge lentement"
+
+      ],
+
+      "mistakes": [
+
+        "Aller trop vite"
+
+      ]
+
+    },
+
+    {
+
+      "id": "bird_dog",
+
+      "title": "Bird Dog",
+
+      "description": "Stabilité",
+
+      "type": "TIMER",
+
+      "duration": 30,
+
+      "rest": 30,
+
+      "video": "videos/bird_dog.mp4",
+
+      "tips": [
+
+        "Dos droit",
+
+        "Regarde le sol"
+
+      ],
+
+      "mistakes": [
+
+        "Creuser le dos"
+
+      ]
+
+    }
+
+  ]
+
+}
