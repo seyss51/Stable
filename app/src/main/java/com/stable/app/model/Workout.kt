@@ -12,6 +12,6 @@ data class Workout(
 
     val estimatedMinutes: Int,
 
-    val exercises: List<Exercise>
+    val exercises: List<WorkoutReference>
 
 )
