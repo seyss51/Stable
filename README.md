@@ -1,20 +1,17 @@
 # S.T.A.B.L.E.
 
-> Construire aujourd'hui le corps sur lequel tu pourras compter demain.
+## Présentation
 
----
+S.T.A.B.L.E. est une application Android dédiée à la préparation physique fonctionnelle.
 
-## Objectif
+Objectifs :
 
-S.T.A.B.L.E. est une application Android développée en Kotlin pour accompagner un programme d'entraînement de 15 minutes, orienté santé, longévité et performance fonctionnelle.
-
-Conçue pour :
-
-- la pratique de la moto
-- le tir longue distance
-- la prévention des douleurs
-- la perte de masse grasse
-- le renforcement du corps
+- Perte de poids
+- Renforcement du haut du corps
+- Préparation Moto
+- Préparation Tir Longue Distance
+- Séances courtes (15 à 20 minutes)
+- Adaptation automatique selon la fatigue
 
 ---
 
@@ -23,15 +20,63 @@ Conçue pour :
 - Kotlin
 - Jetpack Compose
 - Material 3
+- MVVM
 - Room
-- DataStore
+- Navigation Compose
+- GitHub Actions
 
 ---
 
-## Statut
+## Version
 
-🚧 Développement
+0.1.0
 
-Version actuelle :
+---
 
-v0.1.0
+## Roadmap
+
+### V0.1
+
+- Structure du projet
+- Dashboard
+- Thème sombre
+
+### V0.2
+
+- Navigation
+- Base de données
+
+### V0.3
+
+- Séances
+
+### V0.4
+
+- Historique
+
+### V0.5
+
+- Progression
+
+### V1.0
+
+- Première version stable
+
+---
+
+## Compilation
+
+Le projet est compilé automatiquement via GitHub Actions.
+
+Les APK Debug et Release sont disponibles dans les Artifacts de chaque workflow.
+
+---
+
+## Objectif
+
+Créer un coach sportif personnel orienté :
+
+- Moto
+- Tir Longue Distance
+- Santé
+- Performance
