@@ -12,7 +12,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.stable.app.navigation.Screen
 import com.stable.app.ui.theme.Orange500
@@ -22,47 +24,45 @@ fun BottomNavigationBar(
     navController: NavController
 ) {
 
-    val backStack =
-        navController.currentBackStackEntryAsState()
+    val backStackEntry by navController.currentBackStackEntryAsState()
 
-    val currentRoute =
-        backStack.value?.destination?.route
+    val currentRoute = backStackEntry?.destination?.route
+
+    val items = listOf(
+
+        NavigationItem(
+            label = "Accueil",
+            route = Screen.Dashboard.route,
+            icon = Icons.Default.Home
+        ),
+
+        NavigationItem(
+            label = "Séance",
+            route = Screen.Workout.route,
+            icon = Icons.Default.FitnessCenter
+        ),
+
+        NavigationItem(
+            label = "Progression",
+            route = Screen.Progress.route,
+            icon = Icons.Default.BarChart
+        ),
+
+        NavigationItem(
+            label = "Historique",
+            route = Screen.History.route,
+            icon = Icons.Default.History
+        ),
+
+        NavigationItem(
+            label = "Réglages",
+            route = Screen.Settings.route,
+            icon = Icons.Default.Settings
+        )
+
+    )
 
     NavigationBar {
-
-        val items = listOf(
-
-            NavigationItem(
-                "Accueil",
-                Screen.Dashboard.route,
-                Icons.Default.Home
-            ),
-
-            NavigationItem(
-                "Séance",
-                Screen.Workout.route,
-                Icons.Default.FitnessCenter
-            ),
-
-            NavigationItem(
-                "Progression",
-                Screen.Progress.route,
-                Icons.Default.BarChart
-            ),
-
-            NavigationItem(
-                "Historique",
-                Screen.History.route,
-                Icons.Default.History
-            ),
-
-            NavigationItem(
-                "Réglages",
-                Screen.Settings.route,
-                Icons.Default.Settings
-            )
-
-        )
 
         items.forEach { item ->
 
@@ -76,9 +76,14 @@ fun BottomNavigationBar(
 
                         navController.navigate(item.route) {
 
-                            popUpTo(Screen.Dashboard.route)
+                            popUpTo(
+                                navController.graph.findStartDestination().id
+                            ) {
+                                saveState = true
+                            }
 
                             launchSingleTop = true
+                            restoreState = true
 
                         }
 
@@ -101,9 +106,13 @@ fun BottomNavigationBar(
 
                 },
 
+                alwaysShowLabel = true,
+
                 colors = NavigationBarItemDefaults.colors(
+
                     selectedIconColor = Orange500,
                     selectedTextColor = Orange500
+
                 )
 
             )
