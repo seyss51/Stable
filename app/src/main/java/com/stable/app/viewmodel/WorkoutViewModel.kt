@@ -1,8 +1,5 @@
 package com.stable.app.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.stable.app.domain.DailyState
 import com.stable.app.domain.Exercise
@@ -10,57 +7,50 @@ import com.stable.app.domain.WorkoutEngine
 import com.stable.app.domain.WorkoutPlan
 
 /**
- * ViewModel principal des séances.
+ * ViewModel principal des séances S.T.A.B.L.E.
  *
- * Son rôle est de :
- * - conserver l'état du jour
- * - générer la séance adaptée
- * - suivre la progression pendant la séance
- *
- * Aucune base de données n'est utilisée pour l'instant.
- * Elle sera branchée dans une prochaine version.
+ * Il pilote :
+ * - la génération automatique de la séance
+ * - la progression des exercices
+ * - le chronomètre
+ * - le passage exercice suivant
  */
 class WorkoutViewModel : ViewModel() {
 
-    // -------------------------------------------------
-    // Etat utilisateur
-    // -------------------------------------------------
+    // -------------------------------
+    // Etat du jour
+    // -------------------------------
 
-    var fatigue by mutableStateOf(3)
+    var fatigue = 3
         private set
 
-    var pain by mutableStateOf(2)
+    var pain = 2
         private set
 
-    var motivation by mutableStateOf(8)
+    var motivation = 8
         private set
 
-    var sleep by mutableStateOf(7)
+    var sleep = 7
         private set
 
-    // -------------------------------------------------
-    // Séance générée
-    // -------------------------------------------------
+    // -------------------------------
+    // Séance
+    // -------------------------------
 
-    var workout by mutableStateOf<WorkoutPlan?>(null)
+    var workout: WorkoutPlan? = null
         private set
 
-    // -------------------------------------------------
-    // Progression
-    // -------------------------------------------------
+    private var exerciseIndex = 0
 
-    var currentExerciseIndex by mutableStateOf(0)
-        private set
+    // -------------------------------
+    // Chronomètre
+    // -------------------------------
 
-    var completedExercises by mutableStateOf(0)
-        private set
+    val timer = TimerViewModel()
 
-    var sessionStarted by mutableStateOf(false)
-        private set
-
-    // -------------------------------------------------
+    // -------------------------------
     // Mise à jour des curseurs
-    // -------------------------------------------------
+    // -------------------------------
 
     fun updateFatigue(value: Int) {
         fatigue = value
@@ -78,36 +68,30 @@ class WorkoutViewModel : ViewModel() {
         sleep = value
     }
 
-    // -------------------------------------------------
-    // Génération automatique
-    // -------------------------------------------------
+    // -------------------------------
+    // Construction de la séance
+    // -------------------------------
 
     fun generateWorkout() {
 
         workout = WorkoutEngine.buildWorkout(
 
             DailyState(
-
                 fatigue = fatigue,
-
                 pain = pain,
-
                 motivation = motivation,
-
                 sleep = sleep
-
             )
 
         )
 
-        currentExerciseIndex = 0
-        completedExercises = 0
+        exerciseIndex = 0
 
     }
 
-    // -------------------------------------------------
-    // Début de séance
-    // -------------------------------------------------
+    // -------------------------------
+    // Début séance
+    // -------------------------------
 
     fun startWorkout() {
 
@@ -117,93 +101,117 @@ class WorkoutViewModel : ViewModel() {
 
         }
 
-        sessionStarted = true
+        startCurrentExercise()
 
     }
 
-    // -------------------------------------------------
+    // -------------------------------
     // Exercice actuel
-    // -------------------------------------------------
+    // -------------------------------
 
     fun currentExercise(): Exercise? {
 
         val list = workout?.exercises ?: return null
 
-        if (currentExerciseIndex >= list.size) {
+        if (exerciseIndex >= list.size) {
 
             return null
 
         }
 
-        return list[currentExerciseIndex]
+        return list[exerciseIndex]
 
     }
 
-    // -------------------------------------------------
+    // -------------------------------
+    // Lance le chrono
+    // -------------------------------
+
+    fun startCurrentExercise() {
+
+        val exercise = currentExercise() ?: return
+
+        timer.start(
+
+            seconds = exercise.workSeconds,
+
+            work = true
+
+        )
+
+    }
+
+    // -------------------------------
+    // Lance le repos
+    // -------------------------------
+
+    fun startRest() {
+
+        val exercise = currentExercise() ?: return
+
+        timer.start(
+
+            seconds = exercise.restSeconds,
+
+            work = false
+
+        )
+
+    }
+
+    // -------------------------------
     // Exercice suivant
-    // -------------------------------------------------
+    // -------------------------------
 
     fun nextExercise() {
 
-        val list = workout?.exercises ?: return
+        exerciseIndex++
 
-        if (currentExerciseIndex < list.lastIndex) {
-
-            currentExerciseIndex++
-
-            completedExercises++
-
-        } else {
+        if (exerciseIndex >= (workout?.exercises?.size ?: 0)) {
 
             finishWorkout()
 
+            return
+
         }
+
+        startCurrentExercise()
 
     }
 
-    // -------------------------------------------------
-    // Fin de séance
-    // -------------------------------------------------
+    // -------------------------------
+    // Fin séance
+    // -------------------------------
 
     fun finishWorkout() {
 
-        completedExercises = workout?.exercises?.size ?: 0
-
-        sessionStarted = false
+        timer.reset()
 
     }
 
-    // -------------------------------------------------
-    // Progression (0 à 1)
-    // -------------------------------------------------
+    // -------------------------------
+    // Informations UI
+    // -------------------------------
+
+    fun currentExerciseNumber(): Int {
+
+        return exerciseIndex + 1
+
+    }
+
+    fun totalExercises(): Int {
+
+        return workout?.exercises?.size ?: 0
+
+    }
 
     fun progress(): Float {
 
-        val total = workout?.exercises?.size ?: return 0f
+        val total = totalExercises()
 
-        if (total == 0) {
+        if (total == 0) return 0f
 
-            return 0f
-
-        }
-
-        return completedExercises.toFloat() / total.toFloat()
-
-    }
-
-    // -------------------------------------------------
-    // Remise à zéro
-    // -------------------------------------------------
-
-    fun reset() {
-
-        currentExerciseIndex = 0
-
-        completedExercises = 0
-
-        sessionStarted = false
-
-        workout = null
+        return exerciseIndex.toFloat() / total.toFloat()
 
     }
 
