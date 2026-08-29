@@ -1,73 +1,77 @@
 package com.stable.app.engine
 
+import com.stable.app.audio.BeepManager
 import com.stable.app.model.Exercise
 
-class WorkoutEngine {
+class WorkoutEngine(
 
-    private var exercises: List<Exercise> = emptyList()
+    private val timer: WorkoutTimer,
+
+    private val beeper: BeepManager
+
+) {
+
+    private var exercises = emptyList<Exercise>()
 
     private var index = 0
 
-    private var state = WorkoutState()
-
-    fun currentState(): WorkoutState = state
-
-    fun start(list: List<Exercise>): WorkoutState {
+    fun load(list: List<Exercise>) {
 
         exercises = list
-        index = 0
 
-        return loadExercise()
+        index = 0
 
     }
 
-    fun next(): WorkoutState {
+    fun current(): Exercise? {
+
+        return exercises.getOrNull(index)
+
+    }
+
+    fun next(): Exercise? {
 
         index++
 
-        return if (index >= exercises.size) {
-
-            state = state.copy(
-
-                status = WorkoutStatus.FINISHED,
-
-                finished = true
-
-            )
-
-            state
-
-        } else {
-
-            loadExercise()
-
-        }
+        return current()
 
     }
 
-    private fun loadExercise(): WorkoutState {
+    fun hasNext(): Boolean {
 
-        val exercise = exercises[index]
+        return index < exercises.lastIndex
 
-        state = WorkoutState(
+    }
 
-            status = WorkoutStatus.EXERCISE,
+    suspend fun startCountdown(
 
-            exerciseIndex = index,
+        onTick: (Int) -> Unit,
 
-            exercise = exercise,
+        onFinish: () -> Unit
 
-            remainingSeconds = exercise.duration,
+    ) {
 
-            totalExercises = exercises.size,
+        timer.countdown(
 
-            paused = false,
+            5,
 
-            finished = false
+            {
+
+                beeper.countdown()
+
+                onTick(it)
+
+            },
+
+            {
+
+                beeper.go()
+
+                onFinish()
+
+            }
 
         )
-
-        return state
 
     }
 
