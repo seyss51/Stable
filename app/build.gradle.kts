@@ -1,10 +1,10 @@
 plugins {
 
-    alias(libs.plugins.android.application)
+    id("com.android.application")
 
-    alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.kotlin.android")
 
-    alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.compose")
 
 }
 
@@ -12,7 +12,7 @@ android {
 
     namespace = "com.stable.app"
 
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
 
@@ -20,7 +20,7 @@ android {
 
         minSdk = 29
 
-        targetSdk = 35
+        targetSdk = 36
 
         versionCode = 1
 
@@ -37,7 +37,31 @@ android {
 
             isMinifyEnabled = false
 
+            proguardFiles(
+
+                getDefaultProguardFile(
+                    "proguard-android-optimize.txt"
+                ),
+
+                "proguard-rules.pro"
+
+            )
+
         }
+
+    }
+
+    compileOptions {
+
+        sourceCompatibility = JavaVersion.VERSION_21
+
+        targetCompatibility = JavaVersion.VERSION_21
+
+    }
+
+    kotlinOptions {
+
+        jvmTarget = "21"
 
     }
 
@@ -47,41 +71,24 @@ android {
 
     }
 
-    compileOptions {
-
-        sourceCompatibility = JavaVersion.VERSION_17
-
-        targetCompatibility = JavaVersion.VERSION_17
-
-    }
-
-    kotlinOptions {
-
-        jvmTarget = "17"
-
-    }
-
 }
 
 dependencies {
 
-    implementation(platform(libs.androidx.compose.bom))
+    implementation(platform("androidx.compose:compose-bom:2025.02.00"))
 
-    implementation(libs.androidx.core.ktx)
+    implementation("androidx.activity:activity-compose:1.10.1")
 
-    implementation(libs.androidx.lifecycle.runtime)
+    implementation("androidx.compose.material3:material3")
 
-    implementation(libs.androidx.activity.compose)
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 
-    implementation(libs.androidx.ui)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
-    implementation(libs.androidx.ui.preview)
+    implementation("androidx.navigation:navigation-compose:2.8.9")
 
-    implementation(libs.androidx.material3)
-implementation("com.google.code.gson:gson:2.11.0")
-implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
-    debugImplementation(libs.androidx.ui.tooling)
+    implementation("com.google.code.gson:gson:2.11.0")
 
 }
