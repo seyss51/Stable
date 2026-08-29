@@ -1,85 +1,73 @@
 package com.stable.app.engine
 
-import com.stable.app.model.Workout
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.stable.app.model.Exercise
 
-class WorkoutEngine(
+class WorkoutEngine {
 
-    private val timer: WorkoutTimer = WorkoutTimer()
+    private var exercises: List<Exercise> = emptyList()
 
-) {
+    private var index = 0
 
     private var state = WorkoutState()
 
-    fun state() = state
+    fun currentState(): WorkoutState = state
 
-    fun start(
+    fun start(list: List<Exercise>): WorkoutState {
 
-        workout: Workout,
+        exercises = list
+        index = 0
 
-        onUpdate: (WorkoutState) -> Unit
+        return loadExercise()
 
-    ) {
+    }
 
-        if (workout.exercises.isEmpty()) return
+    fun next(): WorkoutState {
 
-        CoroutineScope(Dispatchers.Main).launch {
+        index++
 
-            workout.exercises.forEachIndexed { index, exercise ->
-
-                state = state.copy(
-
-                    currentExercise = exercise,
-
-                    currentIndex = index,
-
-                    remainingTime = exercise.duration,
-
-                    running = true,
-
-                    finished = false
-
-                )
-
-                onUpdate(state)
-
-                if (exercise.duration > 0) {
-
-                    timer.start(
-
-                        seconds = exercise.duration,
-
-                        onTick = {
-
-                            state = state.copy(
-                                remainingTime = it
-                            )
-
-                            onUpdate(state)
-
-                        },
-
-                        onFinish = {}
-
-                    )
-
-                }
-
-            }
+        return if (index >= exercises.size) {
 
             state = state.copy(
 
-                running = false,
+                status = WorkoutStatus.FINISHED,
 
                 finished = true
 
             )
 
-            onUpdate(state)
+            state
+
+        } else {
+
+            loadExercise()
 
         }
+
+    }
+
+    private fun loadExercise(): WorkoutState {
+
+        val exercise = exercises[index]
+
+        state = WorkoutState(
+
+            status = WorkoutStatus.EXERCISE,
+
+            exerciseIndex = index,
+
+            exercise = exercise,
+
+            remainingSeconds = exercise.duration,
+
+            totalExercises = exercises.size,
+
+            paused = false,
+
+            finished = false
+
+        )
+
+        return state
 
     }
 
