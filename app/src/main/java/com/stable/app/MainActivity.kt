@@ -3,6 +3,7 @@ package com.stable.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.stable.app.navigation.AppNavigation
 import com.stable.app.ui.theme.StableTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +13,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             StableTheme {
-                StableApp()
+                AppNavigation()
             }
         }
     }
