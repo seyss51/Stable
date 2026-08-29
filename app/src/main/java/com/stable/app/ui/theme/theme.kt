@@ -1,17 +1,18 @@
 package com.stable.app.ui.theme
 
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
-private val StableColorScheme = darkColorScheme(
+private val StableColors = darkColorScheme(
 
     primary = StableOrange,
 
     secondary = StableOrangeDark,
 
-    background = StableBlack,
+    background = StableBackground,
 
-    surface = StableAnthracite,
+    surface = StableSurface,
 
     onPrimary = StableWhite,
 
@@ -28,7 +29,7 @@ fun StableTheme(
 
     MaterialTheme(
 
-        colorScheme = StableColorScheme,
+        colorScheme = StableColors,
 
         typography = StableTypography,
 
