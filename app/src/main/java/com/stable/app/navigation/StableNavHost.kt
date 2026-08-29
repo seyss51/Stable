@@ -5,6 +5,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.stable.app.ui.screens.dashboard.DashboardScreen
+import com.stable.app.ui.screens.history.HistoryScreen
+import com.stable.app.ui.screens.progress.ProgressScreen
+import com.stable.app.ui.screens.settings.SettingsScreen
+import com.stable.app.ui.screens.workout.WorkoutScreen
 
 @Composable
 fun StableNavHost() {
@@ -18,6 +22,22 @@ fun StableNavHost() {
 
         composable(Screen.Dashboard.route) {
             DashboardScreen(navController)
+        }
+
+        composable(Screen.Workout.route) {
+            WorkoutScreen()
+        }
+
+        composable(Screen.Progress.route) {
+            ProgressScreen()
+        }
+
+        composable(Screen.History.route) {
+            HistoryScreen()
+        }
+
+        composable(Screen.Settings.route) {
+            SettingsScreen()
         }
 
     }
