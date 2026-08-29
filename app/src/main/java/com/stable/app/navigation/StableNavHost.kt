@@ -21,23 +21,33 @@ fun StableNavHost() {
     ) {
 
         composable(Screen.Dashboard.route) {
-            DashboardScreen(navController)
+            DashboardScreen(
+                navController = navController
+            )
         }
 
         composable(Screen.Workout.route) {
-            WorkoutScreen()
+            WorkoutScreen(
+                navController = navController
+            )
         }
 
         composable(Screen.Progress.route) {
-            ProgressScreen()
+            ProgressScreen(
+                navController = navController
+            )
         }
 
         composable(Screen.History.route) {
-            HistoryScreen()
+            HistoryScreen(
+                navController = navController
+            )
         }
 
         composable(Screen.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(
+                navController = navController
+            )
         }
 
     }
