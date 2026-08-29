@@ -1,45 +1,45 @@
 package com.stable.app.engine
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
-import com.stable.app.data.WorkoutRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
-class WorkoutViewModel(
-    application: Application
-) : AndroidViewModel(application) {
+class WorkoutViewModel : ViewModel() {
 
-    private val repository =
-        WorkoutRepository(application)
+    private val controller =
+        WorkoutController()
 
-    private val engine = WorkoutEngine()
+    val state: StateFlow<WorkoutState>
+        = controller.state
 
-    private val _state =
-        MutableStateFlow(WorkoutState())
+    fun start() {
 
-    val state: StateFlow<WorkoutState> =
-        _state
-
-    fun startWorkout() {
-
-        viewModelScope.launch {
-
-            val list = repository.monday()
-
-            _state.value =
-                engine.start(list)
-
-        }
+        controller.dispatch(
+            WorkoutAction.Start
+        )
 
     }
 
-    fun nextExercise() {
+    fun pause() {
 
-        _state.value =
-            engine.next()
+        controller.dispatch(
+            WorkoutAction.Pause
+        )
+
+    }
+
+    fun resume() {
+
+        controller.dispatch(
+            WorkoutAction.Resume
+        )
+
+    }
+
+    fun stop() {
+
+        controller.dispatch(
+            WorkoutAction.Stop
+        )
 
     }
 
