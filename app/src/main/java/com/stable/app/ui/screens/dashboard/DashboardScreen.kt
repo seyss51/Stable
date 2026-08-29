@@ -1,22 +1,15 @@
 package com.stable.app.ui.screens.dashboard
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.stable.app.navigation.Screen
+import com.stable.app.ui.components.BottomNavigationBar
 import com.stable.app.ui.theme.Orange500
 
 @Composable
@@ -33,13 +27,63 @@ fun DashboardScreen(
     navController: NavController
 ) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+    Scaffold(
 
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+        bottomBar = {
+
+            BottomNavigationBar(navController)
+
+        }
+
+    ) { padding ->
+
+        Column(
+
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp),
+
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+
+        ) {
+
+            Header()
+
+            Cockpit()
+
+            ObjectiveCard()
+
+            TodayCard()
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+
+                modifier = Modifier.fillMaxWidth(),
+
+                onClick = {
+
+                    navController.navigate(Screen.Workout.route)
+
+                }
+
+            ) {
+
+                Text("COMMENCER")
+
+            }
+
+        }
+
+    }
+
+}
+
+@Composable
+private fun Header() {
+
+    Column {
 
         Text(
             text = "S.T.A.B.L.E.",
@@ -48,49 +92,38 @@ fun DashboardScreen(
         )
 
         Text(
-            text = "Cockpit",
+            text = "Performance Moto & TLD",
             style = MaterialTheme.typography.titleMedium
         )
 
-        DashboardTop()
-
-        DashboardIndicators()
-
-        DashboardWeight()
-
-        DashboardSession()
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                navController.navigate(Screen.Workout.route)
-            }
-        ) {
-            Text("COMMENCER")
-        }
-
     }
 
 }
 
 @Composable
-private fun DashboardTop() {
+private fun Cockpit() {
 
     Row(
+
         modifier = Modifier.fillMaxWidth(),
+
         horizontalArrangement = Arrangement.SpaceEvenly
+
     ) {
 
-        GaugeCard(
-            title = "NIVEAU",
-            value = "1"
+        Gauge(
+            "NIVEAU",
+            "01"
         )
 
-        GaugeCard(
-            title = "SÉRIES",
-            value = "0"
+        Gauge(
+            "SÉRIES",
+            "00"
+        )
+
+        Gauge(
+            "SEMAINES",
+            "01"
         )
 
     }
@@ -98,135 +131,54 @@ private fun DashboardTop() {
 }
 
 @Composable
-private fun DashboardIndicators() {
+private fun Gauge(
 
-    Card(
-        colors = CardDefaults.cardColors()
-    ) {
-
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-
-            Text(
-                text = "ÉTAT DU JOUR",
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Indicator(
-                "Fatigue",
-                "Bonne"
-            )
-
-            Indicator(
-                "Motivation",
-                "Élevée"
-            )
-
-            Indicator(
-                "Douleurs",
-                "Faibles"
-            )
-
-        }
-
-    }
-
-}
-
-@Composable
-private fun DashboardWeight() {
-
-    Card {
-
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-
-            Text(
-                "OBJECTIF",
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text("Poids actuel : 86 kg")
-            Text("Objectif : 75 kg")
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LinearProgressIndicator(
-                progress = { 0.25f },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-        }
-
-    }
-
-}
-
-@Composable
-private fun DashboardSession() {
-
-    Card {
-
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-
-            Text(
-                "SÉANCE",
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text("Aujourd'hui : Lundi")
-
-            Text("Durée : 18 min")
-
-            Text("Programme : Haut du corps")
-
-        }
-
-    }
-
-}
-
-@Composable
-private fun GaugeCard(
     title: String,
+
     value: String
+
 ) {
 
-    Card {
+    Card(
+
+        colors = CardDefaults.cardColors(),
+
+        shape = RoundedCornerShape(20.dp)
+
+    ) {
 
         Column(
-            modifier = Modifier
-                .padding(20.dp),
+
+            modifier = Modifier.padding(16.dp),
+
             horizontalAlignment = Alignment.CenterHorizontally
+
         ) {
 
             Box(
+
                 modifier = Modifier
-                    .size(70.dp)
+                    .size(72.dp)
                     .clip(CircleShape)
                     .background(Orange500),
+
                 contentAlignment = Alignment.Center
+
             ) {
 
                 Text(
-                    value,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.headlineSmall
+
+                    text = value,
+
+                    style = MaterialTheme.typography.headlineSmall,
+
+                    color = MaterialTheme.colorScheme.onPrimary
+
                 )
 
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(title)
 
@@ -237,21 +189,114 @@ private fun GaugeCard(
 }
 
 @Composable
-private fun Indicator(
+private fun ObjectiveCard() {
+
+    Card {
+
+        Column(
+
+            modifier = Modifier.padding(16.dp)
+
+        ) {
+
+            Text(
+
+                text = "OBJECTIF",
+
+                style = MaterialTheme.typography.titleMedium,
+
+                fontWeight = FontWeight.Bold
+
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            DashboardLine("Poids", "86 kg")
+
+            DashboardLine("Objectif", "75 kg")
+
+            DashboardLine("Perte", "-11 kg")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LinearProgressIndicator(
+
+                progress = { 0.25f },
+
+                modifier = Modifier.fillMaxWidth()
+
+            )
+
+        }
+
+    }
+
+}
+
+@Composable
+private fun TodayCard() {
+
+    Card {
+
+        Column(
+
+            modifier = Modifier.padding(16.dp)
+
+        ) {
+
+            Text(
+
+                text = "ÉTAT DU JOUR",
+
+                style = MaterialTheme.typography.titleMedium,
+
+                fontWeight = FontWeight.Bold
+
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            DashboardLine("Fatigue", "Bonne")
+
+            DashboardLine("Motivation", "Élevée")
+
+            DashboardLine("Douleurs", "Faibles")
+
+            DashboardLine("Séance", "Haut du corps")
+
+            DashboardLine("Durée", "18 min")
+
+        }
+
+    }
+
+}
+
+@Composable
+private fun DashboardLine(
+
     label: String,
+
     value: String
+
 ) {
 
     Row(
+
         modifier = Modifier.fillMaxWidth(),
+
         horizontalArrangement = Arrangement.SpaceBetween
+
     ) {
 
         Text(label)
 
         Text(
-            value,
+
+            text = value,
+
             fontWeight = FontWeight.Bold
+
         )
 
     }
