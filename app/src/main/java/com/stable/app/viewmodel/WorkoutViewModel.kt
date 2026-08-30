@@ -193,9 +193,11 @@ class WorkoutViewModel(
 
     fun finishWorkout() {
 
-        timer.reset()
+    timer.reset()
 
-    }
+    saveWorkout()
+
+}
 
     // -------------------------------
     // Informations UI
