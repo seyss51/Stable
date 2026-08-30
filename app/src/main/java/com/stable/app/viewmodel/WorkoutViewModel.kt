@@ -5,6 +5,10 @@ import com.stable.app.domain.DailyState
 import com.stable.app.domain.Exercise
 import com.stable.app.domain.WorkoutEngine
 import com.stable.app.domain.WorkoutPlan
+import androidx.lifecycle.viewModelScope
+import com.stable.app.data.AppRepository
+import com.stable.app.data.entity.WorkoutSessionEntity
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel principal des séances S.T.A.B.L.E.
@@ -15,7 +19,11 @@ import com.stable.app.domain.WorkoutPlan
  * - le chronomètre
  * - le passage exercice suivant
  */
-class WorkoutViewModel : ViewModel() {
+class WorkoutViewModel(
+
+    private val repository: AppRepository
+
+) : ViewModel()
 
     // -------------------------------
     // Etat du jour
@@ -212,6 +220,39 @@ class WorkoutViewModel : ViewModel() {
         if (total == 0) return 0f
 
         return exerciseIndex.toFloat() / total.toFloat()
+
+    }
+
+}
+fun saveWorkout() {
+
+    val currentWorkout = workout ?: return
+
+    viewModelScope.launch {
+
+        repository.saveSession(
+
+            WorkoutSessionEntity(
+
+                date = System.currentTimeMillis(),
+
+                duration = currentWorkout.duration,
+
+                level = currentWorkout.level,
+
+                completed = true,
+
+                fatigue = fatigue,
+
+                pain = pain,
+
+                motivation = motivation,
+
+                sleep = sleep
+
+            )
+
+        )
 
     }
 
